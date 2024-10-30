@@ -27,3 +27,13 @@ Pomidoro taimer ilusa lauluga, mis jookseb ära
 - kõlar (buzzer),
 - kaugus sensor (põrkeandur) (et ei sõidaks vastu seina),
 - led'id (punane ja sinine)
+
+## Põhilised funktisonaalsused:
+                
+1. timer käima
+2. heli
+3. sõitmine (keeramine)
+4. põrkesensor (random)
+
+Lisa:
+- jätab meelde, kuhu sõidab
