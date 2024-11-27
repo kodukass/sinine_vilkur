@@ -29,4 +29,7 @@ Nädal 4:
 
 Plaan: Sõitmine ja timer kokku panna
 
-Teostus:
+Teostus: Mootori pin'id on lambised. Meil oli pandud nupp ja mootor 7. pin'i. Selle tõttu tekkis meil väga palju probleeme. 
+Pärast väga pikka loogika arutlemist, saime me roboti keerama vasakule ja paremale niimoodi, et see umbes oskaks mitte vastu seina joosta.
+Panime kõige otsa veel ka timeri, buzzeri ja sinise vilkuri külge.
+Lõpus läks LED ekraan katki, aga me saime selle vahetatud niimoodi, et see on leivalaua peal, mitte ei tõllerda taga ringi.
