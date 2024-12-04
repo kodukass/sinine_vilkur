@@ -1,6 +1,5 @@
 #include <Servo.h>
-#define SERVO_PIN   11	//servo to D11
-#define LPT 2 				 
+#define TIMERBTN   11
 #define BUZZ_PIN	13	//buzzer to D13
 
 #define IN1  7    //Right motor(K1/K2) direction Pin 7
@@ -21,7 +20,8 @@
 #define BACK_SPEED2  90 
 #define MOVE_TIME  50   
 
-#define LEDpin1 12                                                                     
+#define LEDpin1 12  
+const int BUTTON_PIN = 4;       // the number of the pushbutton pin
 
 
 const int mindistancelimit = 8; //distance limit for obstacles in front           
@@ -41,7 +41,6 @@ Timer timer;
 U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R0); 
 
 // constants won't change. They're used here to set pin numbers:
-const int BUTTON_PIN = 4;       // the number of the pushbutton pin
 
 // Variables will change:
 int lastState = LOW;  // the previous state from the input pin
@@ -158,7 +157,7 @@ void setup(void) {
  
   digitalWrite(Trig_PIN,LOW);
   /*init servo*/
-  head.attach(SERVO_PIN); 
+  //head.attach(SERVO_PIN); 
   head.write(90);
   delay(2000);
   Serial.begin(9600);  
@@ -168,7 +167,8 @@ void setup(void) {
 }
 
 
-int input = 5;
+
+int input = 1500;
 
 int timerOLED(int input){
   timer.start();
@@ -238,12 +238,13 @@ void loop() {
   tuluke += 1;
   // read the state of the switch/button:
   currentState = digitalRead(BUTTON_PIN);
+  //currentState2 = digitalRead(TIMERBTN);
 
   if(currentState == LOW){
     stop_Stop();
     digitalWrite(LEDpin1, LOW);
     Serial.println("button press");
-    timerInt *= -1;
+    timerInt = -1;
     tuluke = 0;
     noTone(BUZZ_PIN);
   }
@@ -264,11 +265,22 @@ void loop() {
     go_Advance();
     Serial.println("advance");
   }
-  if (mindistancelimit<dist && dist < mediumdistancelimit)
+  
+  double random1=random(-1,1);
+  while (mindistancelimit<dist && dist < mediumdistancelimit)
   { 
-    go_Right();
-    Serial.println("right");
-    delay(150);
+    if (random1<0)
+    {
+      go_Right();
+      Serial.println("right");
+    }
+    else
+    {
+      go_Left();
+      Serial.println("left");
+    }
+    delay(random(100,200));
+    dist=watch();
   }
   if (dist< mindistancelimit)
   { 
@@ -282,11 +294,11 @@ void loop() {
 
   if (tuluke % 5 == 0){
     digitalWrite(LEDpin1, HIGH);
-    tone(BUZZ_PIN, 500);
+    //tone(BUZZ_PIN, 500);
   }
   if (tuluke % 10 == 0){
     digitalWrite(LEDpin1, LOW);
-    tone(BUZZ_PIN, 1000);
+    //tone(BUZZ_PIN, 1000);
   }
   
   }
