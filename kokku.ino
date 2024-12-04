@@ -43,9 +43,9 @@ U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R0);
 // constants won't change. They're used here to set pin numbers:
 
 // Variables will change:
-int lastState = LOW;  // the previous state from the input pin
-int currentState;                // the current reading from the input pin
-int timerInt = -1;
+int lastState = LOW;  // the previous state from the Input pin
+int currentState;                // the current reading from the Input pin
+int lastRunningState = 0;
 int tuluke = 0;
 
 
@@ -141,8 +141,8 @@ void setup(void) {
   pinMode(ENB, OUTPUT);
 
     // initialize serial communication at 9600 bits per second:
-  // initialize the pushbutton pin as an pull-up input
-  // the pull-up input pin will be HIGH when the switch is open and LOW when the switch is closed.
+  // initialize the pushbutton pin as an pull-up Input
+  // the pull-up Input pin will be HIGH when the switch is open and LOW when the switch is closed.
   pinMode(BUTTON_PIN, INPUT_PULLUP);
   Serial.println("setup");
 
@@ -168,15 +168,15 @@ void setup(void) {
 
 
 
-int input = 1500;
+int Input = 5;
 
-int timerOLED(int input){
+int timerOLED(int Input){
   timer.start();
   if(timer.state() == RUNNING) Serial.println("timer running");
 
-  for(int i=0; i <= input; i++){
+  for(int i=0; i <= Input; i++){
 
-    int sec = (input - timer.read()/1000);
+    int sec = (Input - timer.read()/1000);
     int min = (sec/60);
     int secDisplay = (sec-min*60);
     char cstrSec[5];
@@ -240,66 +240,83 @@ void loop() {
   currentState = digitalRead(BUTTON_PIN);
   //currentState2 = digitalRead(TIMERBTN);
 
-  if(currentState == LOW){
-    stop_Stop();
-    digitalWrite(LEDpin1, LOW);
-    Serial.println("button press");
-    timerInt = -1;
-    tuluke = 0;
-    noTone(BUZZ_PIN);
-  }
-  Serial.println(timerInt);
-  // put your main code here, to run repeatedly:
-  if (timerInt == -1)
-  {
-    timerOLED(input);
-    timerInt *= -1;
-   
-  }
-  if (timerInt ==1)
-  {
-      int dist=watch();
-    Serial.println(dist);
-  if (dist>mediumdistancelimit) {
-  //digitalWrite(BUZZ_PIN, LOW);
-    go_Advance();
-    Serial.println("advance");
-  }
-  
-  double random1=random(-1,1);
-  while (mindistancelimit<dist && dist < mediumdistancelimit)
-  { 
-    if (random1<0)
-    {
-      go_Right();
-      Serial.println("right");
+  if(lastRunningState == 0){
+    if(currentState == LOW){
+      lastRunningState = 1;
+      delay(150);
     }
-    else
-    {
-      go_Left();
-      Serial.println("left");
-    }
-    delay(random(100,200));
-    dist=watch();
-  }
-  if (dist< mindistancelimit)
-  { 
-    go_Back();
-    Serial.println("back");
-    delay(500);
-  }
-  
-    
   }
 
-  if (tuluke % 5 == 0){
+  if(lastRunningState==2){
+    if(currentState == LOW){
+      stop_Stop();
+      digitalWrite(LEDpin1, LOW);
+      Serial.println("button press");
+      lastRunningState = 0; //naitab kas robot peab soitma voi peab kaima taimer
+      tuluke = 0;
+      noTone(BUZZ_PIN);
+      delay(150);
+    }
+
+  }
+  
+  Serial.println(lastRunningState);
+  
+  if (lastRunningState == 1)
+  {
+    timerOLED(Input);
+    lastRunningState = 2;
+   
+  }
+
+  if (lastRunningState == 2)
+  {
+    int dist=watch();
+    Serial.println(dist);
+    if (dist>mediumdistancelimit) {
+    //digitalWrite(BUZZ_PIN, LOW);
+      go_Advance();
+      Serial.println("advance");
+    }
+    
+    double random1=random(-1,1);
+    
+    while (mindistancelimit<dist && dist < mediumdistancelimit)
+    { 
+      if (random1<0)
+      {
+        go_Right();
+        Serial.println("right");
+      }
+      else
+      {
+        go_Left();
+        Serial.println("left");
+      }
+      delay(random(100,200));
+      dist=watch();
+    }
+
+    if (dist< mindistancelimit)
+    { 
+      go_Back();
+      Serial.println("back");
+      delay(500);
+    }
+
+    if (tuluke % 5 == 0){
     digitalWrite(LEDpin1, HIGH);
     //tone(BUZZ_PIN, 500);
+    }
+    
+    if (tuluke % 10 == 0){
+      digitalWrite(LEDpin1, LOW);
+      //tone(BUZZ_PIN, 1000);
+      tuluke = tuluke/10;
+    }
   }
-  if (tuluke % 10 == 0){
-    digitalWrite(LEDpin1, LOW);
-    //tone(BUZZ_PIN, 1000);
-  }
+
+  
   
   }
 
