@@ -33,3 +33,10 @@ Teostus: Mootori pin'id on lambised. Meil oli pandud nupp ja mootor 7. pin'i. Se
 Pärast väga pikka loogika arutlemist, saime me roboti keerama vasakule ja paremale niimoodi, et see umbes oskaks mitte vastu seina joosta.
 Panime kõige otsa veel ka timeri, buzzeri ja sinise vilkuri külge.
 Lõpus läks LED ekraan katki, aga me saime selle vahetatud niimoodi, et see on leivalaua peal, mitte ei tõllerda taga ringi.
+
+Nädal 5:
+
+Plaan: Üle vaadata kood, kontrollida, et kõik töötaks, kirjutada dokumentatsioon ja raport
+
+Teostus: panime masina paremini sõitma. Panime koodi ilusti ühte faili ja vaatsime kõik üle. 
+Tegime dokumentatsiooni ära.
